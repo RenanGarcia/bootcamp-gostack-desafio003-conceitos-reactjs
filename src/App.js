@@ -21,7 +21,16 @@ function App() {
   }, []);
 
   async function handleAddRepository() {
-    // TODO
+    try {
+      const { data } = await api.post("/repositories", {
+        url: "https://github.com/josepholiveira",
+        title: `Desafio ${Math.random()}`,
+        techs: ["React", "Node.js"],
+      });
+      setRepositories([...repositories, data]);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function handleRemoveRepository(id) {
