@@ -6,6 +6,7 @@ import "./styles.css";
 
 function App() {
   const [repositories, setRepositories] = useState([]);
+  const [inputText, setInputText] = useState("");
 
   useEffect(() => {
     async function getRepositories() {
@@ -20,11 +21,15 @@ function App() {
     getRepositories();
   }, []);
 
+  function handleInputChange(event) {
+    setInputText(event.target.value);
+  }
+
   async function handleAddRepository() {
     try {
       const { data } = await api.post("/repositories", {
         url: "https://github.com/josepholiveira",
-        title: `Desafio ${Math.random()}`,
+        title: inputText,
         techs: ["React", "Node.js"],
       });
       setRepositories([...repositories, data]);
@@ -54,6 +59,7 @@ function App() {
         ))}
       </ul>
 
+      <input type="text" value={inputText} onChange={handleInputChange} />
       <button onClick={handleAddRepository}>Adicionar</button>
     </div>
   );
