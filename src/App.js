@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from "react";
 
+import api from "./services/api";
 import Repository from "./Repository";
 import "./styles.css";
 
 function App() {
   const [repositories, setRepositories] = useState([]);
+
+  useEffect(() => {
+    async function getRepositories() {
+      try {
+        const { data } = await api.get("/repositories");
+        setRepositories(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    getRepositories();
+  }, []);
+
   async function handleAddRepository() {
     // TODO
   }
