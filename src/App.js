@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 import api from "./services/api";
-import Repository from "./Repository";
+
+import RepositoryList from "./components/RepositoryList";
 import "./styles.css";
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
         const { data } = await api.get("/repositories");
         setRepositories(data);
       } catch (err) {
-        console.log(err);
+        alert(err);
       }
     }
 
@@ -28,13 +29,14 @@ function App() {
   async function handleAddRepository() {
     try {
       const { data } = await api.post("/repositories", {
-        url: "https://github.com/josepholiveira",
+        url: "https://github.com/renangarcia",
         title: inputText,
-        techs: ["React", "Node.js"],
+        techs: [],
       });
       setRepositories([...repositories, data]);
+      setInputText("");
     } catch (err) {
-      console.log(err);
+      alert(err);
     }
   }
 
@@ -49,15 +51,10 @@ function App() {
 
   return (
     <div>
-      <ul data-testid="repository-list">
-        {repositories.map(({ id, title }) => (
-          <Repository
-            key={`repository-list_${id}`}
-            title={title}
-            onRemove={() => handleRemoveRepository(id)}
-          />
-        ))}
-      </ul>
+      <RepositoryList
+        repositories={repositories}
+        onRemoveItem={handleRemoveRepository}
+      />
 
       <input type="text" value={inputText} onChange={handleInputChange} />
       <button onClick={handleAddRepository}>Adicionar</button>
